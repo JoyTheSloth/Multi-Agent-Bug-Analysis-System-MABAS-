@@ -1,0 +1,77 @@
+=============================================================
+     SILK ANALYSIS - INSTRUCTIONS & SAMPLE PAYLOADS
+=============================================================
+
+This application features a full React frontend that connects 
+to a Python FastAPI backend which orchestrates AI agents using Groq.
+
+-------------------------------------------------------------
+1. HOW TO RUN THE APPLICATION
+-------------------------------------------------------------
+
+STEP A: Start the Backend (API & LLM Agents)
+1. Open a new terminal.
+2. Navigate to the backend directory:
+   cd backend
+3. Create and activate a Virtual Environment (if not done yet):
+   python -m venv venv
+   # On Windows:
+   venv\Scripts\activate
+   # On Mac/Linux:
+   source venv/bin/activate
+4. Install dependencies into the virtual environment:
+   uv pip install fastapi uvicorn groq python-dotenv pydantic
+5. Run the FastAPI server:
+   uv run uvicorn backend.main:app --port 8000
+
+STEP B: Start the Frontend (Vite + React)
+1. Open a second terminal window.
+2. Ensure you are in the root directory (/silk-analysis).
+3. If not installed already, install Node dependencies:
+   npm install
+4. Start the frontend:
+   npm run dev
+5. Open your web browser and go to http://localhost:3000
+
+-------------------------------------------------------------
+2. SAMPLE PAYLOAD (TO PASTE INTO THE WEBSITE)
+-------------------------------------------------------------
+Once the website is running, ensure you are on the "Analysis Trace" 
+screen. You can use the following sample inputs to force the system to 
+generate a Reproduction Script that successfully fails:
+
+SAMPLE BUG REPORT 1 (Python Math/Syntax Error):
+When I run the monthly invoice calculator script, it crashes when it encounters a user without a pre-set balance list. It tries to calculate the sum of an empty tuple or string instead of a valid array of integers, which crashes the script because of an unsupported operand type for +: 'int' and 'str'.
+
+SAMPLE LOGS 1:
+[INFO] 10:04 AM: Init InvoiceProcessor
+[WARNING] 10:04 AM: User ID 9912 missing balance list. Defaulting payload to 'empty'.
+[ERROR] 10:05 AM: Process failed for user 9912.
+Traceback (most recent call last):
+  File "src/billing.py", line 42, in process_invoices
+    total = sum_balances(user.balances)
+  File "src/billing.py", line 22, in sum_balances
+    return 100 + balances
+TypeError: unsupported operand type(s) for +: 'int' and 'str'
+
+---
+
+SAMPLE BUG REPORT 2 (Index Out Of Bounds):
+Our data parsing script crashes on Saturdays. It tries to access the 7th element of a week array, but the array is 0-indexed and only has 7 items, so accessing index 7 throws an out of range error every time.
+
+SAMPLE LOGS 2:
+[System] Task 'weekly_crunch' started.
+[DataParser] Loaded days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+[ERROR] Fatal crash attempting to read array index.
+IndexError: list index out of range
+   at parse_week (parser.py:112)
+
+-------------------------------------------------------------
+3. WHAT TO EXPECT
+-------------------------------------------------------------
+When you click "Launch Full Agentic Analysis":
+1. The UI will show live Traceability Logs (e.g. "[Triage] Processing").
+2. The Backend will use Groq to write a Python script based on your payload.
+3. The Backend will physically execute that Python script.
+4. Because the bugs describe fatal crashes, the generated script will throw a traceback error.
+5. The UI will display the generated code, capture the raw 'Red' console error in the window, and provide a patch plan!

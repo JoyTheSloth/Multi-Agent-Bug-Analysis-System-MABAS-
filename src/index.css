@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-primary: #6366f1;
+  --color-background: #e8eaf0;
+  --color-surface: #e8eaf0;
+  --color-surface-variant: #dcdee4;
+  --color-surface-container: #e2e4ea;
+  --color-tertiary: #7c3aed;
+  --color-on-surface: #2e3040;
+  --color-on-surface-variant: #585a68;
+  --color-outline: #8a8c9a;
+  --color-error: #dc2626;
+
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --shadow-neo-raised: 6px 6px 12px rgba(0,0,0,0.08), -6px -6px 12px rgba(255,255,255,0.6);
+  --shadow-neo-inset: inset 4px 4px 8px rgba(0,0,0,0.06), inset -4px -4px 8px rgba(255,255,255,0.5);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-sans;
+  }
+}
+
+@layer utilities {
+  .neo-raised {
+    box-shadow: var(--shadow-neo-raised);
+  }
+  .neo-inset {
+    box-shadow: var(--shadow-neo-inset);
+  }
+  .neo-pressed:active {
+    box-shadow: var(--shadow-neo-inset);
+    transform: scale(0.98);
+  }
+}

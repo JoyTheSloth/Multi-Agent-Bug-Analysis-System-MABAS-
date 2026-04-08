@@ -1,0 +1,5 @@
+{
+  "name": "Silk Analysis",
+  "description": "A neomorphic dashboard for multi-agent system analysis, log exploration, and fix planning.",
+  "requestFramePermissions": []
+}

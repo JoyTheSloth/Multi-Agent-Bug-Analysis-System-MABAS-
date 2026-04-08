@@ -1,0 +1,160 @@
+
+
+# 🎯 What You Need To Finish (Backend Logic Checklist)
+
+Since your **UI is done**, you only need to ensure these backend pieces are solid:
+
+---
+
+## ✅ 1. Connect UI → Backend (VERY IMPORTANT)
+
+Your UI should:
+
+* Send:
+
+  * bug report
+  * logs
+
+👉 To backend (Python API / function)
+
+Example flow:
+
+```text
+UI → backend → agents → tools → output → UI
+```
+
+---
+
+## ✅ 2. Implement Agents (Core Logic)
+
+Make sure these actually run (not static):
+
+* Triage Agent
+* Log Analyst Agent
+* Reproduction Agent ⚠️ (MOST IMPORTANT)
+* Fix Planner Agent
+* Reviewer Agent
+
+👉 Each should return real output
+
+---
+
+## ✅ 3. Tool Execution (MANDATORY)
+
+At least 2 tools must be real:
+
+* parse logs
+* extract stack trace
+* run repro script
+
+👉 Example:
+
+```python
+def run_repro_script(path):
+    import subprocess
+    return subprocess.run(["python", path], capture_output=True, text=True)
+```
+
+---
+
+## ⚠️ 4. REPRO SCRIPT (THIS DECIDES YOUR SELECTION)
+
+Your system must:
+
+* Generate `repro.py`
+* Run it
+* It MUST fail
+
+Example:
+
+```python
+int("abc")
+```
+
+👉 If this works correctly → you're already ahead of 80% candidates
+
+---
+
+## ✅ 5. Final JSON Output (Hook to UI)
+
+Your backend should return:
+
+```json
+{
+  "bug_summary": {},
+  "evidence": [],
+  "repro": {},
+  "root_cause": {},
+  "patch_plan": {},
+  "validation_plan": []
+}
+```
+
+👉 UI should display this nicely
+
+---
+
+## ✅ 6. Logs / Traceability (Easy Win)
+
+Print or show:
+
+```
+[Triage] Processing...
+[Log Analyst] Parsing logs...
+[Repro] Executing script...
+```
+
+👉 You can even show this in UI → looks 🔥
+
+---
+
+# 🚀 Final Architecture (What you should have)
+
+```text
+Frontend (done ✅)
+        ↓
+Backend API
+        ↓
+Agents (logic)
+        ↓
+Tools (execution)
+        ↓
+Repro script (fails)
+        ↓
+Final JSON → UI
+```
+
+---
+
+# 🧠 Reality Check (Important)
+
+You are DONE if:
+
+✔ UI sends data
+✔ Agents run
+✔ Tools execute
+✔ Repro fails
+✔ JSON output shows
+
+👉 That’s a **complete system**
+
+---
+
+# ⚡ Quick Boost (Optional but powerful)
+
+If you want to stand out:
+
+* Show **“Running reproduction…” loading UI**
+* Show **error output from repro**
+* Show **confidence score bar**
+
+---
+
+# 🔥 Final Advice
+
+Since you already built UI:
+
+👉 Don’t overcomplicate logic
+👉 Make sure everything WORKS
+
+
