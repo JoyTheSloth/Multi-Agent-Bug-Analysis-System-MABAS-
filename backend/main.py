@@ -136,9 +136,14 @@ async def analyze_bug(req: AnalyzeRequest):
     log("[Alex] (Reviewer) Reviewing patch...")
     validation = run_reviewer(patch_plan)
     
+    # ✅ Track stats BEFORE returning
+    if repro_result["success"]:
+        _repro_success_count += 1
+    _total_time_ms += int((_time.time() - t_start) * 1000)
+
     return {
         "bug_summary": {"summary": triage_summary},
-        "evidence": req.logs.split("\\n")[:5], 
+        "evidence": req.logs.split("\n")[:5],
         "repro": {
             "code": repro_code,
             "stdout": repro_result["stdout"],
@@ -150,10 +155,6 @@ async def analyze_bug(req: AnalyzeRequest):
         "validation_plan": [validation],
         "trace_logs": trace_logs
     }
-    if repro_result["success"]:
-        _repro_success_count += 1
-    _total_time_ms += int((_time.time() - t_start) * 1000)
-    return result
 
 class AuditRequest(BaseModel):
     logs: str

@@ -17,7 +17,7 @@ export default function AnalysisTraceScreen() {
   const [result, setResult] = useState<any>(null);
   const [errorDetails, setErrorDetails] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-    triage: true, repro: true, patch: true, validation: true, json: false
+    triage: true, rootcause: true, repro: true, patch: true, validation: true, json: false
   });
   const traceRef = useRef<HTMLDivElement>(null);
 
@@ -216,8 +216,8 @@ export default function AnalysisTraceScreen() {
             {/* Root Cause */}
             <ResultCard
               icon="🔍" title="Root Cause Analysis" color="border-cyan-500/50"
-              expanded={expandedSections.triage}
-              onToggle={() => toggleSection('triage')}
+              expanded={expandedSections.rootcause}
+              onToggle={() => toggleSection('rootcause')}
               onCopy={() => copyToClipboard(result.root_cause.details)}
             >
               <div className="prose max-w-none text-sm leading-relaxed text-on-surface">

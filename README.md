@@ -1,83 +1,161 @@
-# 🕵️ MABAS (Multi-Agent Bug Analysis System)
+# 🕵️ MABAS — Multi-Agent Bug Analysis System
 
-Welcome to **MABAS**, a fully autonomous, multi-agent AI pipeline designed to ingest bug reports, dynamically reproduce them via scripted sandboxes, analyze logs, generate patch plans, and review fixes—all displayed in a beautiful, neo-brutalism dashboard.
+An autonomous, multi-agent AI pipeline that ingests bug reports, dynamically reproduces them via sandboxed Python scripts, analyzes logs, generates patch plans, and reviews fixes — all in a real-time neo-brutalism dashboard.
 
----
-
-## ✨ Features
-
-- **Multi-Agent Architecture**: 5 specialized AI agents powered by **Groq Cloud (Llama 3.1)** executing a sequential chain-of-thought.
-  - 🚨 **Jim (Triage Agent)**: Categorizes severity and parses initial bug reports.
-  - 💥 **Bob (Reproduction Agent)**: Dynamically generates and executes Python scripts (`repro.py`) locally to trigger crashes.
-  - 🔍 **Sarah (Log Analyst)**: Identifies the root cause by cross-referencing system logs with Bob's `stderr` traces.
-  - 🛠️ **Mike (Fix Planner)**: Authors a detailed patch plan, including code replacements and rollback instructions.
-  - ✅ **Alex (Reviewer)**: Critiques Mike's fixes, calculates risk arrays, and sets validation boundaries.
-- **Agentic Sandboxing**: Safely executes Python code generation without breaking your local environment.
-- **Real-Time Data Streams**: Frontend React dashboard streams real-time AI logic and live server analytics straight from FastAPI endpoints.
-- **Actionable Tooling**: Built-in AI Log Explainer, AI System Audit, Version Comparer, and Markdown exporters.
+> **Powered by Groq Cloud (Llama 3.1 8B Instant) + FastAPI + React + Vite**
 
 ---
 
-## 🚀 Tech Stack
+## 🤖 The 5 Agents
 
-- **Frontend**: React, Vite, Tailwind CSS V4, Framer Motion, React-Markdown.
-- **Backend**: FastAPI, Uvicorn, Python 3, Pydantic.
-- **AI Engine**: Groq SDK (Llama 3.1 8B instant).
+| Agent | Role | Persona |
+|-------|------|---------|
+| 🚨 **Jim** | Triage Agent | Categorizes bug severity and impact |
+| 💥 **Bob** | Reproduction Agent | Generates & **actually executes** Python scripts to crash-reproduce the bug |
+| 🔍 **Sarah** | Log Analyst | Cross-references logs with Bob's `stderr` to find the root cause |
+| 🛠️ **Mike** | Fix Planner | Authors a detailed patch plan with code snippets and rollback steps |
+| ✅ **Alex** | Reviewer | Critiques the fix, scores risk (0–100), and delivers a final verdict |
 
 ---
 
-## ⚙️ How to Run Locally
+## 🚀 How to Run Locally
 
-You need two side-by-side terminal instances running simultaneously for the system to process agentic analysis.
+You need **two terminals running side-by-side**.
 
-### 1️⃣ Start the FastAPI Backend
-Ensure you have `uv` (or `pip`) installed. 
+### Prerequisites
+- Python 3.10+
+- Node.js 18+
+- A free [Groq Cloud](https://console.groq.com) API key
+
+---
+
+### Step 1 — Clone the Repo
 
 ```bash
-# Verify you are in the project root directory
-# Set up your Groq Cloud API environment variable:
-# In Bash: export GROQ_API_KEY="your-key-here"
-# In PowerShell: $env:GROQ_API_KEY="your-key-here"
+git clone https://github.com/JoyTheSloth/Multi-Agent-Bug-Analysis-System-MABAS-.git
+cd Multi-Agent-Bug-Analysis-System-MABAS-
+```
+
+---
+
+### Step 2 — Configure Your API Key
+
+Create a `.env` file in the project root:
+
+```bash
+# .env
+GROQ_API_KEY=your_groq_api_key_here
+VITE_GROQ_API_KEY=your_groq_api_key_here
+```
+
+> Get your free key at: https://console.groq.com/keys
+
+---
+
+### Step 3 — Start the Backend (Terminal 1)
+
+```bash
+# Install uv if you don't have it
+pip install uv
 
 # Install backend dependencies
 uv pip install fastapi uvicorn groq python-dotenv pydantic
 
-# Run the backend inference server
-uv run uvicorn backend.main:app --port 8000
+# Run the backend server (must be on port 8000)
+uv run uvicorn backend.main:app --port 8000 --reload
 ```
-> The backend must be running on port `8000`.
 
-### 2️⃣ Start the React Frontend
-Open a completely new terminal instance inside the same project root.
+✅ You should see: `Uvicorn running on http://0.0.0.0:8000`
+
+---
+
+### Step 4 — Start the Frontend (Terminal 2)
 
 ```bash
 # Install Node dependencies
 npm install
 
-# Start the Vite development environment
+# Start Vite dev server
 npm run dev
 ```
 
-### 3️⃣ Launch Analysis
-- Navigate to `http://localhost:3001` (or your local Vite address).
-- Go to the **Jobs** tab.
-- Click **Launch Full Agentic Analysis** to watch Jim, Bob, Sarah, Mike, and Alex tackle the bug live!
+✅ You should see: `Local: http://localhost:5173`
 
 ---
 
-## 🔮 Usage Examples
+### Step 5 — Run Your First Analysis
 
-Paste this into the **Jobs -> Bug Report** block to test the agents:
-> *"When I hit the checkout button on the mobile app, the app crashes and returns me to the home screen. I am logged in, but my cart was empty during one test, and full during another."*
-
-Paste this into the **Jobs -> Logs** block:
-> \`[INFO] 14:02:01 Request POST /api/checkout started\`<br>
-> \`[WARN] 14:02:05 PaymentGateway timed out after 4000ms\`<br>
-> \`[ERROR] 14:02:11 NullReferenceException in PaymentProcessor.Process(). User context is null.\`<br>
-> \`[ERROR] 14:02:12 StackTrace: at MobileApp.Payment.Submit() line 82\`
-
-Click **Launch** and watch the system orchestrate!
+1. Open `http://localhost:5173` in your browser
+2. Click **Jobs** in the sidebar
+3. Paste a bug report and logs into the input boxes
+4. Click **🚀 Launch Full Agentic Analysis**
+5. Watch Jim, Bob, Sarah, Mike, and Alex work in real-time!
 
 ---
 
-*Designed and engineered with precision and speed.*
+## 🧪 Example Inputs
+
+**Bug Report:**
+```
+When I hit the checkout button on the mobile app, the app crashes and returns 
+me to the home screen. I am logged in, but my cart was empty during one test, 
+and full during another.
+```
+
+**Logs:**
+```
+[INFO] 14:02:01 Request POST /api/checkout started
+[WARN] 14:02:05 PaymentGateway timed out after 4000ms
+[ERROR] 14:02:11 NullReferenceException in PaymentProcessor.Process(). User context is null.
+[ERROR] 14:02:12 StackTrace: at MobileApp.Payment.Submit() line 82
+```
+
+---
+
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/analyze` | Full 5-agent pipeline (Triage → Repro → Log → Fix → Review) |
+| `POST` | `/api/audit` | Sarah audits raw logs |
+| `POST` | `/api/explain-log` | Explains a single log line |
+| `POST` | `/api/plan-fix` | Mike generates a patch plan |
+| `POST` | `/api/review-fix` | Alex reviews a patch plan |
+| `GET`  | `/api/status` | Dashboard telemetry (agent status, stats) |
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18, Vite, Tailwind CSS v4, Framer Motion, React-Markdown
+- **Backend**: FastAPI, Uvicorn, Pydantic, Python-dotenv
+- **AI Engine**: Groq SDK — `llama-3.1-8b-instant`
+- **Sandboxing**: `subprocess.run` executes generated repro scripts locally in `backend/repro.py`
+
+---
+
+## 📁 Project Structure
+
+```
+silk-analysis/
+├── backend/
+│   └── main.py          # FastAPI server + all 5 agent functions
+├── src/
+│   ├── screens/
+│   │   ├── AnalysisTraceScreen.tsx   # Jobs / full pipeline UI
+│   │   ├── DashboardScreen.tsx       # Overview dashboard
+│   │   ├── LogExplorerScreen.tsx     # Log audit + explainer
+│   │   ├── FixPlannerScreen.tsx      # Fix planner + reviewer
+│   │   └── DocumentationScreen.tsx  # In-app docs
+│   ├── components/
+│   │   ├── Sidebar.tsx
+│   │   └── Topbar.tsx
+│   └── App.tsx
+├── .env.example         # Copy this to .env and fill in your key
+├── package.json
+└── README.md
+```
+
+---
+
+*Built with precision and speed. Powered by Groq.*
